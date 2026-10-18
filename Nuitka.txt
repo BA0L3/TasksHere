@@ -1,19 +1,42 @@
-.\venv\Scripts\python.exe -m nuitka `                                
->>   --mode=standalone `                                           
->>   --enable-plugin=pyside6 `
->>   --windows-console-mode=disable `
->>   --windows-icon-from-ico=Datas\TaskHere.ico `
->>   --include-data-files=Datas\TaskHere.ico=Datas\TaskHere.ico `
->>   --include-data-files=Datas\TaskHere.png=Datas\TaskHere.png `
->>   --output-dir=build `
->>   --experimental=disable-freelist-all `
->>   main_gui.py
+# Build the GUI application.
+.\venv\Scripts\python.exe -m nuitka `
+  --mode=standalone `
+  --enable-plugin=pyside6 `
+  --windows-console-mode=disable `
+  --windows-icon-from-ico=Datas\assets\TaskHere.ico `
+  --include-data-files=Datas\assets\TaskHere.ico=Datas\assets\TaskHere.ico `
+  --include-data-files=Datas\assets\TaskHere.png=Datas\assets\TaskHere.png `
+  --output-dir=build `
+  --experimental=disable-freelist-all `
+  main_gui.py
 
-.\venv\Scripts\python.exe -m nuitka `                                
->>   --mode=standalone `                                                             
->>   --enable-plugin=pyside6 `
->>   --windows-icon-from-ico=Datas\TaskHere.ico `
->>   --include-data-files=Datas\TaskHere.ico=Datas\TaskHere.ico `
->>   --include-data-files=Datas\TaskHere.png=Datas\TaskHere.png `
->>   --output-dir=build `                                        
->>   main.py      
+# Build the CLI application.
+.\venv\Scripts\python.exe -m nuitka `
+  --mode=standalone `
+  --enable-plugin=pyside6 `
+  --windows-icon-from-ico=Datas\assets\TaskHere.ico `
+  --include-data-files=Datas\assets\TaskHere.ico=Datas\assets\TaskHere.ico `
+  --include-data-files=Datas\assets\TaskHere.png=Datas\assets\TaskHere.png `
+  --output-dir=build `
+  main.py
+
+# Build one self-contained update helper into each application distribution.
+.\venv\Scripts\python.exe -m nuitka `
+  --mode=onefile `
+  --windows-console-mode=disable `
+  --output-dir=build\main_gui.dist `
+  --output-filename=Unziper.exe `
+  Unziper.py
+
+.\venv\Scripts\python.exe -m nuitka `
+  --mode=onefile `
+  --windows-console-mode=disable `
+  --output-dir=build\main.dist `
+  --output-filename=Unziper.exe `
+  Unziper.py
+
+# Upload ZIP files with each distribution's contents at the archive root.
+Compress-Archive -Path build\main_gui.dist\* `
+  -DestinationPath build\TasksHere-GUI-1.1.0-Portable.zip -Force
+Compress-Archive -Path build\main.dist\* `
+  -DestinationPath build\TasksHere-CLI-1.1.0-Portable.zip -Force

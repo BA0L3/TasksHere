@@ -24,12 +24,12 @@ TASKS_FILE = resolve_path("Datas//Tasks.json")
 LOG_DIR = resolve_path("Datas//logs")
 LOG_FILE = LOG_DIR / "taskshere.log"
 SETTINGS_FILE = resolve_path("Datas//settings.json")
-ICON_FILE = resolve_path("Datas//TaskHere.ico")
-IMG_FILE = resolve_path("Datas//TaskHere.png")
+ICON_FILE = resolve_path("Datas//assets//TaskHere.ico")
+IMG_FILE = resolve_path("Datas//assets//TaskHere.png")
 
 METADATA = {
     "name": "TasksHere",
-    "version": "1.1.0",
+    "version": "1.2.1",
     "credit": "BA0L3 (BA0L3-dev or Lê Nguyễn Gia Bảo)",
     "developer": "BA0L3",
     "os": ["windows10", "windows11"],

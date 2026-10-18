@@ -11,9 +11,25 @@ from config import METADATA, TASKS_FILE, WEIGHTS, setup_logging
 logger = logging.getLogger(__name__)
 
 
-def main() -> int:
+def main(update_status: str | None = None) -> int:
     setup_logging()
     logger.info("%s %s starting", METADATA["name"], METADATA["version"])
+    if update_status is None:
+        from Updater import start_update_if_available
+
+        update_started, update_warning = start_update_if_available(1, "main.exe")
+        if update_started:
+            return 0
+        if update_warning:
+            logger.warning("%s", update_warning)
+            print(f"Warning: {update_warning}")
+    elif update_status == "updated":
+        logger.info("TasksHere was updated successfully.")
+        print("TasksHere was updated successfully.")
+    else:
+        logger.error("Update failed: %s", update_status)
+        print(f"Warning: the update could not be applied: {update_status}")
+
     runtime: BackgroundRuntime | None = None
     try:
         settings = Settings()
@@ -73,4 +89,9 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--update-status")
+    args = parser.parse_args()
+    raise SystemExit(main(args.update_status))

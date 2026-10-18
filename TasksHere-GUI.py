@@ -1,12 +1,11 @@
-import os
+import argparse
+import ctypes
 import logging
+import os
 import sys
 
 from PySide6.QtCore import QObject, QTimer, Signal
 from PySide6.QtWidgets import QApplication, QMessageBox
-
-import ctypes
-from config import METADATA
 
 from Background import (
     BackgroundRuntime,
@@ -18,6 +17,7 @@ from Database import DataBase
 from Settings import Settings
 from config import METADATA, TASKS_FILE, WEIGHTS, setup_logging
 from gui import MainWindow
+from Updater import start_update_if_available
 
 
 logger = logging.getLogger(__name__)
@@ -34,10 +34,24 @@ class _WindowSignals(QObject):
     tasks_changed = Signal()
 
 
-def main() -> int:
+def main(update_status: str | None = None) -> int:
     setup_logging()
     logger.info("%s %s GUI starting", METADATA["name"], METADATA["version"])
-    application = QApplication(sys.argv)
+    startup_warning: str | None = None
+    if update_status is None:
+        update_started, startup_warning = start_update_if_available(
+            0,
+            "main_gui.exe",
+        )
+        if update_started:
+            return 0
+    elif update_status == "updated":
+        logger.info("TasksHere was updated successfully.")
+    else:
+        logger.error("Update failed: %s", update_status)
+        startup_warning = f"Không thể áp dụng bản cập nhật:\n{update_status}"
+
+    application = QApplication([sys.argv[0]])
     application.setApplicationName(METADATA["name"])
     application.setStyle("Fusion")
 
@@ -45,7 +59,6 @@ def main() -> int:
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
     runtime: BackgroundRuntime | None = None
-    startup_warning: str | None = None
     try:
         settings = Settings()
         if settings.recovery_message:
@@ -122,4 +135,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--update-status")
+    args = parser.parse_args()
+    raise SystemExit(main(args.update_status))

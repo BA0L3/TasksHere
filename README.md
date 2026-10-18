@@ -1,6 +1,6 @@
 # TasksHere
 
-![app](Datas/TaskHere.png)
+![app](Datas/assets/TaskHere.png)
 
 Review:
 
@@ -20,6 +20,8 @@ orders tasks by a calculated priority score.
   otherwise they remain in the timed-out tab and return automatically next time.
 - Keep tasks sorted from highest to lowest priority.
 - Use reminders, deadline alerts, and a Windows system-tray icon.
+- Packaged GUI and CLI builds can check for GitHub ZIP releases and apply an
+  update after the running application exits.
 - Choose the interface language and appearance in the application settings. (EngLish and Tiếng Việt are supported))
 
 | Stored type | Task kind |
@@ -40,7 +42,7 @@ orders tasks by a calculated priority score.
 Install the application dependencies:
 
 ```powershell
-python -m pip install PySide6 prompt_toolkit pystray Pillow windows-toasts
+python -m pip install PySide6 prompt_toolkit pystray Pillow windows-toasts requests
 ```
 
 ### Start the application

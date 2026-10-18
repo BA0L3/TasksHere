@@ -15,7 +15,7 @@ from Settings import Settings
 from config import WEIGHTS
 from gui import MainWindow, SettingsDialog, TaskDialog
 from i18n import colors
-from main_gui import _should_start_hidden
+from TasksHere_gui import _should_start_hidden
 
 
 class GuiTests(unittest.TestCase):
